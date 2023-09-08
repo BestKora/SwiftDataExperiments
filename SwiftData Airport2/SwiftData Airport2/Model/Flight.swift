@@ -40,6 +40,7 @@ import SwiftData
     init(ident: String) {
         self.ident = ident
     }
+    
     // ----- implementation of Codable ---
     enum CodingKeys: String, CodingKey {
         case ident
@@ -67,20 +68,24 @@ import SwiftData
             self.ident = try container.decode(String.self, forKey: .ident)
             self.actualOff = try container.decode(Date?.self, forKey: .actualOff)
             self.scheduledOff = try container.decode(Date.self, forKey: .scheduledOff)
-            self.estimatedOff = try! container.decode(Date?.self, forKey: .estimatedOff) ?? self.scheduledOff
+            self.estimatedOff = try! container.decode(Date?.self, forKey: .estimatedOff)
+                                    ?? self.scheduledOff
             self.actualOn = try container.decode(Date?.self, forKey: .actualOn)
             self.scheduledOn = try container.decode(Date.self, forKey: .scheduledOn)
-            self.estimatedOn = try! container.decode(Date?.self, forKey: .estimatedOn) ?? self.scheduledOn
-            
-            self.aircraftType = try container.decode(String?.self, forKey: .aircraftType) ?? "Unknown"
+            self.estimatedOn = try! container.decode(Date?.self, forKey: .estimatedOn) 
+                                    ?? self.scheduledOn
+            self.aircraftType = try container.decode(String?.self, forKey: .aircraftType) 
+                                     ?? "Unknown"
             self.progressPercent = try container.decode(Int.self, forKey: .progressPercent)
             self.status = try container.decode(String.self, forKey: .status)
             self.routeDistance = try container.decode(Int.self, forKey: .routeDistance)
             self.filedAirspeed = try container.decode(Int?.self, forKey: .filedAirspeed) ?? 0
             self.filedAltitude = try container.decode(Int?.self, forKey: .filedAltitude) ?? 0
-            let dictionaryOrigin: [String: String?] = try container.decode(Dictionary<String, String?>.self, forKey: .origin)
+            let dictionaryOrigin: [String: String?] = 
+                     try container.decode(Dictionary<String, String?>.self, forKey: .origin)
             self.icaoOrigin = dictionaryOrigin ["code"]!!
-            let dictionaryDestination: [String: String?]  = try container.decode(Dictionary<String, String?>.self, forKey: .destination)
+            let dictionaryDestination: [String: String?]  = 
+                     try container.decode(Dictionary<String, String?>.self, forKey: .destination)
             self.icaoDestination =  dictionaryDestination["code"]!!
             self.codeAirLine =  String(ident.prefix(while: { !$0.isNumber }))
            

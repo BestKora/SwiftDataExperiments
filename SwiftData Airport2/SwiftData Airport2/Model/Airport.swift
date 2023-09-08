@@ -54,7 +54,6 @@ import MapKit
         func encode(to encoder: Encoder) throws {
           // TODO: Handle encoding if you need to here
         }
-
 }
 
 extension Airport {

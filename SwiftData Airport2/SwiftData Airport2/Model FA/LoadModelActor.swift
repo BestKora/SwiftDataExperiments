@@ -32,9 +32,12 @@ actor LoadModelActor: ModelActor {
                 + (flightsFromFA.scheduledDepartures)
                  
                     for flightFA in flightsFA {
-                        flightFA.origin = Airport.withICAO(flightFA.icaoOrigin, context: context)
-                        flightFA.destination = Airport.withICAO(flightFA.icaoDestination, context: context)
-                        flightFA.airline = Airline.withCode(flightFA.codeAirLine, context: context)
+                        flightFA.origin = 
+                           Airport.withICAO(flightFA.icaoOrigin, context: context)
+                        flightFA.destination =
+                           Airport.withICAO(flightFA.icaoDestination, context: context)
+                        flightFA.airline =
+                           Airline.withCode(flightFA.codeAirLine, context: context)
                         context.insert(flightFA)
                     }
                 context.saveContext()

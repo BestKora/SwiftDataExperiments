@@ -10,6 +10,7 @@ import SwiftData
 import MapKit
 
 // MARK: - @Model Airport
+
 @Model final class Airport {
     @Attribute (.unique) var icao: String
     var name: String
@@ -28,7 +29,6 @@ import MapKit
     init(icao: String) {
         self.icao = icao
     }
-    
 }
 
 // MARK: - extension Airport withICAO update calculated

@@ -10,17 +10,17 @@ import SwiftData
 import MapKit
 
 @Model final class Airport {
-    /*@Attribute (.unique)*/ var icao: String
-    var name: String
-    var city: String
-    var state: String
-    var countryCode: String
-    var latitude: Double
-    var longitude: Double
-    var timezone: String
+   /* @Attribute (.unique)*/ var icao: String
+    var name: String = ""
+    var city: String = ""
+    var state: String = ""
+    var countryCode: String = ""
+    var latitude: Double = 0.0
+    var longitude: Double = 0.0
+    var timezone: String = ""
     
-    @Relationship (/*.cascade,*/ inverse: \Flight.origin) var flightsFrom: [Flight]
-    @Relationship (/*.cascade,*/ inverse: \Flight.destination)  var flightsTo: [Flight]
+    @Relationship (inverse: \Flight.origin) var flightsFrom: [Flight] = []
+    @Relationship (inverse: \Flight.destination)  var flightsTo: [Flight] = []
     
     init(icao: String) {
         self.icao = icao
@@ -30,15 +30,7 @@ import MapKit
            countryCode: String,
            latitude: Double, longitude: Double, timezone: String ) {
         self.icao = icao
-        self.name = name
-        self.city = city
-        self.state = state
-        self.countryCode = countryCode
-        self.latitude = latitude
-        self.longitude = longitude
-        self.timezone = timezone
     }
-
 }
 
 extension Airport {

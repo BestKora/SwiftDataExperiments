@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct AirlinesView: View {
-  //  @Environment(\.modelContext) private var context
     @Query(sort: \Airline.name, order: .forward) private var airlines: [Airline]
     @State private var searchQuery = ""
     
@@ -43,9 +42,7 @@ struct AirlinesView: View {
 }
 
 #Preview {
-    MainActor.assumeIsolated {
         AirlinesView()
                .modelContainer(previewContainer)
-       }
 }
 

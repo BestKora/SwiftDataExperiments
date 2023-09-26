@@ -89,7 +89,7 @@ struct FlightsView: View {
     }
     
     private func asyncLoad () async {  // actor
-            let actor = LoadModelActor(container: context.container)
+        let actor = LoadModelActor(modelContainer: context.container)
             await actor.airportTask.finish()
             await actor.airlineTask.finish()
             await actor.flightTaskKSFO.finish()
@@ -120,13 +120,13 @@ struct FlightView: View {
         VStack(alignment: .leading){
             HStack{
                 Text(flight.ident)
-                Text("**\(flight.origin.city)**").foregroundColor(.purple)
+                Text("**\(flight.origin?.city ?? "")**").foregroundColor(.purple)
                 Text(" -> ")
-                Text("**\(flight.destination.city)**").foregroundColor(.purple)
+                Text("**\(flight.destination?.city ?? "")**").foregroundColor(.purple)
             }.font(.headline)
             
             HStack{
-                Text("**\(flight.airline.name)**")
+                Text("**\(flight.airline?.name ?? "")**")
                 Spacer()
                 Text("**\(flight.aircraftType)**")
                     .foregroundColor(.accentColor)
@@ -165,13 +165,13 @@ struct FlightViewShort: View {
                 if flight.destination == airport {
                     Text(flight.scheduledOn.formatted(date: .omitted, time: .shortened))
                         .font(.callout)
-                    Text(flight.origin.city).font(.system(size: 16, weight: .semibold, design: .rounded))
+                    Text(flight.origin?.city ?? "").font(.system(size: 16, weight: .semibold, design: .rounded))
                     Spacer()
                     Text(flight.ident).font(.callout)
                 } else {
                     Text(flight.scheduledOff.formatted(date: .omitted, time: .shortened))
                         .font(.callout)
-                    Text(flight.destination.city ).font(.system(size: 16, weight: .semibold, design: .rounded))
+                    Text(flight.destination?.city ?? "" ).font(.system(size: 16, weight: .semibold, design: .rounded))
                     Spacer()
                     Text(flight.ident).font(.callout)
                 }
@@ -195,10 +195,10 @@ struct FlightViewShort: View {
 }
 
 #Preview {
-    MainActor.assumeIsolated {
+ //   MainActor.assumeIsolated {
         return FlightsView(flightFilter: .constant(FlightFilter()), flightSorting: .constant(FlightSorting.distanceUP))
                .modelContainer(previewContainer)
-       }
+ //      }
 }
 
 extension Task {

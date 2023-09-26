@@ -17,9 +17,9 @@ struct FlightsView: View {
     
     var filteredFlights: [Flight] {
         guard  originICAO != nil, originICAO!.count > 0 else {return  flights}
-        return flights.filter {$0.origin.icao.contains(originICAO!)}
+        return flights.filter {$0.origin != nil && $0.origin!.icao.contains(originICAO!)}
         }
- 
+  
     var body: some View {
         NavigationView {
             List {
@@ -66,13 +66,13 @@ struct FlightView: View {
         VStack(alignment: .leading){
             HStack{
                 Text(flight.ident)
-                Text("**\(flight.origin.city)**").foregroundColor(.purple)
+                Text("**\(flight.origin?.city ?? "")**").foregroundColor(.purple)
                 Text(" -> ")
-                Text("**\(flight.destination.city)**").foregroundColor(.purple)
+                Text("**\(flight.destination?.city ?? "")**").foregroundColor(.purple)
             }.font(.headline)
             
             HStack{
-                Text("**\(flight.airline.name)**")
+                Text("**\(flight.airline?.name ?? "")**")
                 Spacer()
                 Text("**\(flight.aircraftType)**")
                     .foregroundColor(.accentColor)
@@ -112,13 +112,13 @@ struct FlightViewShort: View {
                 if flight.destination == airport {
                     Text(flight.scheduledOn.formatted(date: .omitted, time: .shortened))
                         .font(.callout)
-                    Text(flight.origin.city).font(.system(size: 16, weight: .semibold, design: .rounded))
+                    Text(flight.origin?.city ?? "").font(.system(size: 16, weight: .semibold, design: .rounded))
                     Spacer()
                     Text(flight.ident).font(.callout)
                 } else {
                     Text(flight.scheduledOff.formatted(date: .omitted, time: .shortened))
                         .font(.callout)
-                    Text(flight.destination.city ).font(.system(size: 16, weight: .semibold, design: .rounded))
+                    Text(flight.destination?.city ?? "" ).font(.system(size: 16, weight: .semibold, design: .rounded))
                     Spacer()
                     Text(flight.ident).font(.callout)
                 }
@@ -142,8 +142,6 @@ struct FlightViewShort: View {
 }
 
 #Preview {
-    MainActor.assumeIsolated {
-        return FlightsView()
+        FlightsView()
                .modelContainer(previewContainer)
-       }
 }

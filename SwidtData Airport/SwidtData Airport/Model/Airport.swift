@@ -12,26 +12,29 @@ import MapKit
 // MARK: - @Model Airport
 
 @Model final class Airport {
-    @Attribute (.unique) var icao: String
-    var name: String
-    var city: String
-    var state: String
-    var countryCode: String
-    var latitude: Double
-    var longitude: Double
-    var timezone: String
+   /* @Attribute (.unique)*/ var icao: String
+    var name: String = ""
+    var city: String = ""
+    var state: String = ""
+    var countryCode: String = ""
+    var latitude: Double = 0.0
+    var longitude: Double = 0.0
+    var timezone: String = ""
     
-    @Relationship (deleteRule: .cascade, inverse: \Flight.origin)
-                                            var flightsFrom: [Flight]
-    @Relationship (deleteRule: .cascade, inverse: \Flight.destination)
-                                            var flightsTo:   [Flight]
-
+    @Relationship (inverse: \Flight.origin) var flightsFrom: [Flight] = []
+    @Relationship (inverse: \Flight.destination)  var flightsTo: [Flight] = []
+    
     init(icao: String) {
+        self.icao = icao
+    }
+    
+    init(icao: String, name: String, city: String, state: String,
+           countryCode: String,
+           latitude: Double, longitude: Double, timezone: String ) {
         self.icao = icao
     }
 }
 
-// MARK: - extension Airport withICAO update calculated
 extension Airport {
     
     static func withICAO(_ icao: String, context: ModelContext) -> Airport {
@@ -67,6 +70,16 @@ extension Airport {
         }
     }
     
+    static func insert (from info: AirportInfo, context: ModelContext) {
+        if !info.airportCode.isEmpty {
+            let airport = Airport (icao: info.airportCode, name: info.name, city: info.city,
+                                   state: info.state, countryCode: info.countryCode,
+                                   latitude: info.latitude, longitude: info.longitude, timezone: info.timezone)
+            context.insert(airport)
+            
+        }
+    }
+    
     //----------- Calculated atribute --------------
     var coordinate: CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
@@ -99,5 +112,3 @@ extension Airport {
         }
     }
 }
-
-   

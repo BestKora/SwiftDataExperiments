@@ -10,11 +10,10 @@ import SwiftData
 
 // MARK: - @Model Airline
 @Model final class Airline {
-    @Attribute (.unique) var code: String
-    var name: String
-    var shortname: String
-    @Relationship (deleteRule: .cascade, inverse: \Flight.airline)
-    var flights: [Flight]
+    /*@Attribute (.unique)*/ var code: String
+    var name: String = ""
+    var shortname: String = ""
+    @Relationship (inverse: \Flight.airline) var flights: [Flight] = []
     
     init(code: String) {
         self.code = code

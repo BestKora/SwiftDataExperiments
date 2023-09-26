@@ -41,8 +41,8 @@ struct AirportDetailView: View {
 }
 
 #Preview {
-    MainActor.assumeIsolated {
+  //  MainActor.assumeIsolated {
         AirportDetailView(airport: previewAirport)
                .modelContainer(previewContainer)
-       }
+  //     }
 }

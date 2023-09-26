@@ -10,27 +10,31 @@ import SwiftData
 
 @MainActor
 let previewContainer: ModelContainer = {
+    let schema = Schema([
+        Airport.self, Airline.self, Flight.self,
+    ])
+    let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+
     do {
-        let container = try ModelContainer (
-            for: [Airport.self, Airline.self, Flight.self],
-               ModelConfiguration(inMemory: true)
-        )
-        // Add in sample data
+        let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+        
         SampleData.airportsInsert(context: container.mainContext)
         SampleData.airlinesInsert(context: container.mainContext)
         SampleData.flightsInsert(context: container.mainContext)
         return container
     } catch {
-        fatalError("Failed to create preview container")
+        fatalError("Could not create ModelContainer: \(error)")
     }
 }()
 
+// airport
 let previewAirport: Airport = {
     MainActor.assumeIsolated {
         return Airport.withICAO("KSFO", context: previewContainer.mainContext)
     }
 } ()
 
+// airline
 let previewAirline: Airline  = {
     MainActor.assumeIsolated {
         return Airline.withCode ("UAL", context: previewContainer.mainContext)
@@ -38,6 +42,7 @@ let previewAirline: Airline  = {
 } ()
 
 struct SampleData {
+    // -----  1 ----
     static let airports: [Airport] = {
         let airportData1: Airport  = {
             var airport =  Airport(icao: "KSFO")
@@ -50,6 +55,7 @@ struct SampleData {
             airport.timezone = "America/Los_Angeles"
             return airport
         } ()
+        // -----  2 ----
         let airportData2: Airport  = {
             var airport =  Airport(icao: "KJFK")
             airport.latitude = 40.6399278
@@ -61,6 +67,7 @@ struct SampleData {
             airport.timezone = "America/New_York"
             return airport
         } ()
+        // -----  3 ----
         let airportData3: Airport  = {
             var airport =  Airport(icao: "KPDX")
             airport.latitude = 45.5887089
@@ -72,7 +79,7 @@ struct SampleData {
             airport.timezone = "America/Los_Angeles"
             return airport
         } ()
-        
+        // -----  4 ----
         let airportData4: Airport  = {
             var airport =  Airport(icao: "KSEA")
             airport.latitude = 47.4498889
@@ -84,7 +91,7 @@ struct SampleData {
             airport.timezone = "America/Los_Angeles"
             return airport
         } ()
-        
+        // -----  5 ----
         let airportData5: Airport  = {
             var airport =  Airport(icao: "KACV")
             airport.latitude = 40.9778333
@@ -100,13 +107,14 @@ struct SampleData {
     }()
     
     static let airlines: [Airline] = {
+        // -----  1 ----
         let airlineData1: Airline = {
             var airline =  Airline(code: "UAL")
             airline.name = "United Air Lines Inc."
             airline.shortname = "United"
             return airline
         } ()
-        
+        // -----  2 ----
         let airlineData2: Airline = {
             var airline =  Airline(code: "SKW")
             airline.name = "SkyWest Airlines"
@@ -147,13 +155,11 @@ struct SampleData {
         flight1.origin =  Airport.withICAO("KSFO", context: context)
         flight1.destination = Airport.withICAO("KSEA", context: context)
         
-      //  flight1.actualOff = ISO8601DateFormatter().date(from:"2022-01-26T16:10:00Z")
         flight1.scheduledOff = ISO8601DateFormatter().date(from:"2022-01-26T17:41:00Z")!
         flight1.estimatedOff = ISO8601DateFormatter().date(from:"2022-01-26T17:41:00Z")!
         
         flight1.scheduledOn = ISO8601DateFormatter().date(from:"2022-01-26T18:59:00Z")!
         flight1.estimatedOn = ISO8601DateFormatter().date(from:"2022-01-26T19:18:00Z")!
-        //  flight1.actualOn = faflight.actualOn
         
         flight1.aircraftType = "A319"
         
@@ -176,7 +182,6 @@ struct SampleData {
         
         flight3.scheduledOn = ISO8601DateFormatter().date(from:"2022-08-25T06:29:00Z")!
         flight3.estimatedOn = ISO8601DateFormatter().date(from:"2022-08-25T06:48:00Z")!
-        //  flight3.actualOn = faflight.actualOn
         
         flight3.aircraftType = "E75L"
         

@@ -53,8 +53,6 @@ struct AirportMap: View {
 
 
 #Preview {
-    MainActor.assumeIsolated {
         AirportMap(airport: Bindable(previewAirport))
                .modelContainer(previewContainer)
-       }
 }

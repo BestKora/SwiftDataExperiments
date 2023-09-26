@@ -23,7 +23,7 @@ struct AirportsView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(filteredAirports) { airport in
+                ForEach(airports/*filteredAirports*/) { airport in
                     NavigationLink(value: airport){
                         HStack{
                             Text( "**\(airport.icao)**").foregroundColor(.purple)
@@ -32,7 +32,7 @@ struct AirportsView: View {
                     }
                 }
             }
-            .searchable(text: $searchQuery, prompt: "Search for airport")
+          //  .searchable(text: $searchQuery, prompt: "Search for airport")
             .listStyle(.plain)
             .navigationTitle("Airports (\(airports.count))")
             .navigationDestination(for: Airport.self) { airport in
@@ -43,8 +43,8 @@ struct AirportsView: View {
 }
 
 #Preview {
-    MainActor.assumeIsolated {
+ //   MainActor.assumeIsolated {
         AirportsView()
                .modelContainer(previewContainer)
-       }
+  //     }
 }

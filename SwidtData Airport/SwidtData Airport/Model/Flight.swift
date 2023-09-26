@@ -10,26 +10,26 @@ import SwiftData
 
 // MARK: - @Model Flight
 
-@Model final class Flight{
-    @Attribute (.unique) var ident: String
+@Model final class Flight {
+   /* @Attribute (.unique)*/ var ident: String
     
     var actualOff: Date?
-    var scheduledOff: Date
-    var estimatedOff: Date
-    var scheduledOn: Date
-    var estimatedOn: Date
+    var scheduledOff: Date = Date()
+    var estimatedOff: Date = Date()
+    var scheduledOn: Date = Date()
+    var estimatedOn: Date = Date()
     var actualOn: Date?
     
-    var aircraftType: String
-    var progressPercent: Int
-    var status: String
-    var routeDistance: Int
-    var filedAirspeed:Int
-    var filedAltitude: Int
+    var aircraftType: String = ""
+    var progressPercent: Int = 0
+    var status: String = ""
+    var routeDistance: Int = 0
+    var filedAirspeed: Int = 0
+    var filedAltitude: Int = 0
     
-    var origin: Airport
-    var destination: Airport
-    var airline: Airline
+    var origin: Airport?
+    var destination: Airport?
+    var airline: Airline?
     
     init(ident: String) {
         self.ident = ident

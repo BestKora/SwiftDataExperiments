@@ -9,24 +9,22 @@ import Foundation
 import SwiftData
 import MapKit
 
-@Model final class Airport: Codable {
-    @Attribute (.unique) var icao: String
-    var name: String
-    var city: String
-    var state: String
-    var countryCode: String
-    var latitude: Double
-    var longitude: Double
-    var timezone: String
-    
-    @Relationship (deleteRule: .cascade, inverse: \Flight.origin)
-                                            var flightsFrom: [Flight]
-    @Relationship (deleteRule: .cascade, inverse: \Flight.destination)
-                                            var flightsTo:   [Flight]
-
-    init(icao: String) {
-        self.icao = icao
-    }
+@Model final class Airport: Codable{
+    /* @Attribute (.unique)*/ var icao: String
+     var name: String = ""
+     var city: String = ""
+     var state: String = ""
+     var countryCode: String = ""
+     var latitude: Double = 0.0
+     var longitude: Double = 0.0
+     var timezone: String = ""
+     
+     @Relationship (inverse: \Flight.origin) var flightsFrom: [Flight] = []
+     @Relationship (inverse: \Flight.destination)  var flightsTo: [Flight] = []
+     
+     init(icao: String) {
+         self.icao = icao
+     }
     
     enum CodingKeys: String, CodingKey {
             case airportCode  //  icao

@@ -42,9 +42,7 @@ struct AirlinesView: View {
 }
 
 #Preview {
-    MainActor.assumeIsolated {
         AirlinesView()
                .modelContainer(previewContainer)
-       }
 }
 

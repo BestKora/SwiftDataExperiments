@@ -9,19 +9,21 @@ import Foundation
 import SwiftData
 
 actor LoadModelActor: ModelActor {
-    let executor: any ModelExecutor
-   
-    lazy var flightTaskKSFO  = Task {await flightsAsyncCodable (FilesJSON.flightsFileKSFO4)}
-    lazy var flightTaskKORD  = Task {await flightsAsyncCodable (FilesJSON.flightsFileKORD1)}
-    lazy var airportTask     = Task {await airportsAsyncCodable (FilesJSON.airportsFile) }
-    lazy var airlineTask     = Task {await airLinesAsyncCodable (FilesJSON.airlinesFile) }
+    let modelContainer: ModelContainer
+    let modelExecutor: any ModelExecutor
+
+    lazy var flightTaskKSFO  = Task {await flightsAsync (FilesJSON.flightsFileKSFO4)}
+    lazy var flightTaskKORD  = Task {await flightsAsync (FilesJSON.flightsFileKORD1)}
+    lazy var airportTask  = Task {await airportsAsync (FilesJSON.airportsFile) }
+    lazy var airlineTask  = Task {await airLinesAsync (FilesJSON.airlinesFile) }
     
-    init(container: ModelContainer) {
-        let context = ModelContext(container)
-        executor = DefaultModelExecutor(context: context)
-    }
+    init(modelContainer: ModelContainer) {
+        self.modelContainer = modelContainer
+        let context = ModelContext(modelContainer)
+        modelExecutor = DefaultSerialModelExecutor(modelContext: context)
+      }
     
-    func flightsAsyncCodable (_ nameJSON: String) async  {
+    func flightsAsync(_ nameJSON: String) async  {
         var flights: FlightsCodable?
         do {
             flights = try await FromJSONAPI.shared.fetchAsyncThrows (nameJSON)
@@ -33,44 +35,44 @@ actor LoadModelActor: ModelActor {
                  
                     for flightFA in flightsFA {
                         flightFA.origin = 
-                           Airport.withICAO(flightFA.icaoOrigin, context: context)
+                           Airport.withICAO(flightFA.icaoOrigin, context: modelContext)
                         flightFA.destination =
-                           Airport.withICAO(flightFA.icaoDestination, context: context)
+                           Airport.withICAO(flightFA.icaoDestination, context: modelContext)
                         flightFA.airline =
-                           Airline.withCode(flightFA.codeAirLine, context: context)
-                        context.insert(flightFA)
+                           Airline.withCode(flightFA.codeAirLine, context: modelContext)
+                        modelContext.insert(flightFA)
                     }
-                context.saveContext()
+                modelContext.saveContext()
             }
         } catch {
             print (" In file \(nameJSON) \(error)")
         }
     }
     
-    func airportsAsyncCodable(_ nameJSON: String) async {
+    func airportsAsync (_ nameJSON: String) async {
         var airports: [Airport]? = []
         do {
             airports = try await FromJSONAPI.shared.fetchAsyncThrows (nameJSON)
             if let airportsFA = airports {
                     for airport in airportsFA {
-                        context.insert(airport)
+                        modelContext.insert(airport)
                     }
-                context.saveContext()
+                modelContext.saveContext()
             }
         } catch {
             print (" In file \(nameJSON) \(error)")
         }
     }
     
-    func airLinesAsyncCodable (_ nameJSON: String) async {
+    func airLinesAsync (_ nameJSON: String) async {
          var airlines: [Airline]? = []
          do {
              airlines = try await FromJSONAPI.shared.fetchAsyncThrows (nameJSON)
              if let airlinesFA = airlines {
                      for airline in airlinesFA {
-                         context.insert(airline)
+                         modelContext.insert(airline)
                      }
-                 context.saveContext()
+                 modelContext.saveContext()
              }
          } catch {
              print (" In file \(nameJSON) \(error)")

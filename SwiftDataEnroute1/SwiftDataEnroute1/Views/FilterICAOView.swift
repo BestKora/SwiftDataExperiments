@@ -9,9 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct FilterICAOView: View {
-    @Query(filter: #Predicate<Airport> { $0.flightsFrom.count > 0 }, sort: \Airport.name, order: .forward)
-               var airportsFROM: [Airport]
-   
+    @Query ( filter: #Predicate<Airport> { $0.flightsFrom.count > 0 }) var airportsFROM: [Airport]
+    
     @Binding var originICAO: String?
     @Binding var isPresented: Bool
     
@@ -32,8 +31,9 @@ struct FilterICAOView: View {
             Form {
                     Picker("Origin", selection: $draft) {
                         Text("Any").tag(Airport?.none)
-                        ForEach(airportsFROM) { (airport: Airport?) in
-                            Text("\(airport?.name/*friendlyName*/ ?? "Any")").tag(airport)
+                        ForEach(airportsFROM/*filteredAirportsFROM*/) { (airport: Airport?) in
+                            Text("\(airport?.name ?? "Any")").tag(airport)
+                         
                         }
                     }
                     .pickerStyle(.inline)
@@ -61,3 +61,7 @@ struct FilterICAOView: View {
     }
 }
 
+#Preview {
+        FilterICAOView(originICAO: .constant("KSFO"), isPresented: .constant(true), context: previewContainer.mainContext)
+               .modelContainer(previewContainer)
+}

@@ -10,27 +10,30 @@ import SwiftData
 import MapKit
 
 @Model final class Airport {
-   /* @Attribute (.unique)*/ var icao: String
-    var name: String
-    var city: String
-    var state: String
-    var countryCode: String
-    var latitude: Double
-    var longitude: Double
-    var timezone: String
-    
-    @Relationship (/*deleteRule: .cascade,*/ inverse: \Flight.origin)
-                                            var flightsFrom: [Flight]
-    @Relationship (/*deleteRule: .cascade, */ inverse: \Flight.destination)
-                                            var flightsTo:   [Flight]
-
-    init(icao: String) {
-        self.icao = icao
-    }
+    /* @Attribute (.unique)*/ var icao: String
+     var name: String = ""
+     var city: String = ""
+     var state: String = ""
+     var countryCode: String = ""
+     var latitude: Double = 0.0
+     var longitude: Double = 0.0
+     var timezone: String = ""
+     
+     @Relationship (inverse: \Flight.origin) var flightsFrom: [Flight] = []
+     @Relationship (inverse: \Flight.destination)  var flightsTo: [Flight] = []
+     
+     init(icao: String) {
+         self.icao = icao
+     }
+     
+     init(icao: String, name: String, city: String, state: String,
+            countryCode: String,
+            latitude: Double, longitude: Double, timezone: String ) {
+         self.icao = icao
+     }
 }
 
 extension Airport {
-    
     static func withICAO(_ icao: String, context: ModelContext) -> Airport {
         // look up icao in SwiftData
         let airportPredicate = #Predicate<Airport> {

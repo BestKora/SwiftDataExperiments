@@ -19,21 +19,19 @@ struct AirlineDetailView: View {
                                 .font(.callout).foregroundColor(.primary)
                             
                             Text(flight.ident).font(.callout).foregroundColor(.accentColor)
-                            Text(flight.origin.city).font(.system(size: 16, weight: .semibold, design: .rounded))
+                            Text(flight.origin?.city ?? "").font(.system(size: 16, weight: .semibold, design: .rounded))
                             Spacer()
-                            Text(flight.destination.city).font(.system(size: 16, weight: .semibold, design: .rounded))
+                            Text(flight.destination?.city ?? "").font(.system(size: 16, weight: .semibold, design: .rounded))
                             
                         }
                     }
-                }
-        }
+                } // List
+        }// VStack
         .navigationTitle(airline.name)
     }
 }
 
 #Preview {
-    MainActor.assumeIsolated {
         AirlineDetailView(airline: previewAirline)
                .modelContainer(previewContainer)
-       }
 }

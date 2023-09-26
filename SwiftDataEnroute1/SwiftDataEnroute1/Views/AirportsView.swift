@@ -40,24 +40,9 @@ struct AirportsView: View {
             }
         }
     }
-    
-    /*var airportsListQuery: Query<Airport,[Airport]> {
-        var predicate: Predicate<Airport>?
-        if !nameSearchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            predicate = .init(#Predicate<Airport>{ airport in airport.name.contains(nameSearchText)})
-            return Query(filter: predicate, sort: \.name, order: .forward)
-        } else {
-            predicate = .init(#Predicate<Airport>{ airport  in !airport.name.isEmpty})
-            return Query( filter: predicate,sort: \.name, order: .forward)
-        }
-        
-    }*/
 }
 
 #Preview {
-    MainActor.assumeIsolated {
         AirportsView()
                .modelContainer(previewContainer)
-       }
 }
-/*airports*/

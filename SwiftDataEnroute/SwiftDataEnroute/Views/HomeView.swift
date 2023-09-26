@@ -35,8 +35,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    MainActor.assumeIsolated {
         HomeView()
                .modelContainer(previewContainer)
-       }
 }

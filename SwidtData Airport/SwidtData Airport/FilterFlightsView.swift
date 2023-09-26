@@ -133,9 +133,7 @@ struct FilterFlightsView: View {
 }
 
 #Preview {
-    MainActor.assumeIsolated {
         FilterFlightsView(flightSearch: .constant(FlightFilter()), isPresented: .constant(true))
                .modelContainer(previewContainer)
-       }
 }
 

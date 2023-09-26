@@ -9,17 +9,20 @@ import Foundation
 import SwiftData
 
 actor LoadModelActor: ModelActor {
-    let executor: any ModelExecutor
+    let modelContainer: ModelContainer
+    let modelExecutor: any ModelExecutor
+
     lazy var flightTaskKSFO  = Task {await flightsAsync (FilesJSON.flightsFileKSFO4)}
     lazy var flightTaskKORD  = Task {await flightsAsync (FilesJSON.flightsFileKORD1)}
     lazy var airportTask  = Task {await airportsAsync (FilesJSON.airportsFile) }
     lazy var airlineTask  = Task {await airLinesAsync (FilesJSON.airlinesFile) }
     
-    init(container: ModelContainer) {
-        let context = ModelContext(container)
-        executor = DefaultModelExecutor(context: context)
-    }
-    
+    init(modelContainer: ModelContainer) {
+        self.modelContainer = modelContainer
+        let context = ModelContext(modelContainer)
+        modelExecutor = DefaultSerialModelExecutor(modelContext: context)
+      }
+
     func flightsAsync(_ nameJSON: String) async  {
         var flights: FlightsInfo?
         do {
@@ -31,9 +34,9 @@ actor LoadModelActor: ModelActor {
                 + (flightsFromFA.scheduledDepartures)
                  
                     for flightFA in flightsFA {
-                        Flight.update(from: flightFA, in: context)
+                        Flight.update(from: flightFA, in: modelContext)
                     }
-                context.saveContext()
+                modelContext.saveContext()
             }
         } catch {
             print (" In file \(nameJSON) \(error)")
@@ -46,9 +49,9 @@ actor LoadModelActor: ModelActor {
             airports = try await FromJSONAPI.shared.fetchAsyncThrows (nameJSON)
             if let airportsFA = airports {
                     for airport in airportsFA {
-                        Airport.update(from: airport, context: context)
+                        Airport.update(from: airport, context: modelContext)
                     }
-                context.saveContext()
+                modelContext.saveContext()
             }
         } catch {
             print (" In file \(nameJSON) \(error)")
@@ -61,9 +64,9 @@ actor LoadModelActor: ModelActor {
              airlines = try await FromJSONAPI.shared.fetchAsyncThrows (nameJSON)
              if let airlinesFA = airlines {
                      for airline in airlinesFA {
-                         Airline.update(info: airline, context: context)
+                         Airline.update(info: airline, context: modelContext)
                      }
-                 context.saveContext()
+                 modelContext.saveContext()
              }
          } catch {
              print (" In file \(nameJSON) \(error)")

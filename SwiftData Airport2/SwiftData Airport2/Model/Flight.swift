@@ -11,7 +11,7 @@ import SwiftData
 // MARK: - @Model Flight
 
 @Model final class Flight: Codable {
-/* @Attribute (.unique)*/ var ident: String
+ @Attribute (.unique) var ident: String
  var actualOff: Date?
  var scheduledOff: Date = Date()
  var estimatedOff: Date = Date()

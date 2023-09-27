@@ -195,10 +195,8 @@ struct FlightViewShort: View {
 }
 
 #Preview {
- //   MainActor.assumeIsolated {
-        return FlightsView(flightFilter: .constant(FlightFilter()), flightSorting: .constant(FlightSorting.distanceUP))
+        FlightsView(flightFilter: .constant(FlightFilter()), flightSorting: .constant(FlightSorting.distanceUP))
                .modelContainer(previewContainer)
- //      }
 }
 
 extension Task {

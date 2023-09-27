@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model final class Airline: Codable {
-    /*@Attribute (.unique)*/ var code: String
+    @Attribute (.unique) var code: String
     var name: String = ""
     var shortname: String = ""
     @Relationship (inverse: \Flight.airline) var flights: [Flight] = []

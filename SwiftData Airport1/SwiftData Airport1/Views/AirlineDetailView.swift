@@ -32,8 +32,6 @@ struct AirlineDetailView: View {
 }
 
 #Preview {
-  //  MainActor.assumeIsolated {
         AirlineDetailView(airline: previewAirline)
                .modelContainer(previewContainer)
-  //     }
 }

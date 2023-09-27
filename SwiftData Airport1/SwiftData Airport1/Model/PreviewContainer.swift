@@ -10,14 +10,10 @@ import SwiftData
 
 @MainActor
 let previewContainer: ModelContainer = {
-    let schema = Schema([
-        Airport.self, Airline.self, Flight.self,
-    ])
-    let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-
     do {
-        let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
-        
+       
+        let container = try ModelContainer (for: Airport.self, Airline.self, Flight.self,
+                                            configurations: ModelConfiguration(isStoredInMemoryOnly: true))
         SampleData.airportsInsert(context: container.mainContext)
         SampleData.airlinesInsert(context: container.mainContext)
         SampleData.flightsInsert(context: container.mainContext)

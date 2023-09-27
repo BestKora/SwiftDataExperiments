@@ -10,7 +10,7 @@ import SwiftData
 import MapKit
 
 @Model final class Airport: Codable{
-    /* @Attribute (.unique)*/ var icao: String
+     @Attribute (.unique) var icao: String
      var name: String = ""
      var city: String = ""
      var state: String = ""
